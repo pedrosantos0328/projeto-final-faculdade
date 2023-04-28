@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const DiretoriaController = require("../../scr/controller/diretoriaController");
 const diretoriaController = new DiretoriaController();
+const ProfessorController = require("../../scr/controller/professorController");
+const professorController = new ProfessorController();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
@@ -22,7 +24,7 @@ app.post("/criar-diretoria", async function (req, res) {
 app.put("/alterar-diretoria/:idDiretoria", async function (req, res) {
     const body = req.body;
     const idDiretoria = req.params.idDiretoria;
-    if(req.body.nome) {
+    if(req.body.nome && req.body.cpf && req.body.endereco) {
         const result = await diretoriaController.alterarDiretoria(idDiretoria, body);
         return res.json(result);  
     } 
@@ -34,6 +36,15 @@ app.delete("/deletar-diretoria/:idDiretoria", async function (req, res) {
     const idDiretoria = req.params.idDiretoria;
     const result = await diretoriaController.deletarDiretoria(idDiretoria);
     return res.json(result);
+});
+app.get("/listar-professor", async function (request, response) {
+    const result = await professorController.listarProfessor();
+    return response.json(result);
+});
+app.get("/consultar-professor-por-id/:idProfessor", async function (request, response) {
+    const idProfessor = request.params.idProfessor;
+    const result = await professorController.consultarProfessorPorId(idProfessor);
+    return response.json(result);
 });
 
 
