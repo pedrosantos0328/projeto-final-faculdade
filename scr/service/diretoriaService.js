@@ -1,7 +1,4 @@
-const axios = require('axios');
 const Database = require('../../database/conectDb');
-const { Sequelize } = require('../../config/DB');
-const { Op } = require('../../config/DB');
 const Diretoria = require('../../models/diretoriatb');
 class DiretoriaService {
 
