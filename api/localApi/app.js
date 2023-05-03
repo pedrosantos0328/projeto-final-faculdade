@@ -46,6 +46,27 @@ app.get("/consultar-professor-por-id/:idProfessor", async function (request, res
     const result = await professorController.consultarProfessorPorId(idProfessor);
     return response.json(result);
 });
+app.post("/criar-professor", async function (req, res) {
+    const body = req.body;
+    const result = await professorController.criarProfessor(body);
+    return res.json(result);
+});
+app.put("/alterar-professor/:idProfessor", async function (req, res) {
+    const body = req.body;
+    const idProfessor = req.params.idProfessor;
+    if(req.body.nome && req.body.cpf && req.body.endereco) {
+        const result = await professorController.alterarProfessor(idProfessor, body);
+        return res.json(result);  
+    } 
+    else {
+        return res.json("Necessário passar campos obrigatórios: nome, cpf, endereco");
+    }
+});
+app.delete("/deletar-professor/:idProfessor", async function (req, res) {
+    const idProfessor = req.params.idProfessor;
+    const result = await professorController.deletarProfessor(idProfessor);
+    return res.json(result);
+});
 
 
 
