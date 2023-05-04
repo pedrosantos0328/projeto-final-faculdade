@@ -4,6 +4,8 @@ const DiretoriaController = require("../../scr/controller/diretoriaController");
 const diretoriaController = new DiretoriaController();
 const ProfessorController = require("../../scr/controller/professorController");
 const professorController = new ProfessorController();
+const CursoController = require("../../scr/controller/cursoController");
+const cursoController = new CursoController();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
@@ -65,6 +67,36 @@ app.put("/alterar-professor/:idProfessor", async function (req, res) {
 app.delete("/deletar-professor/:idProfessor", async function (req, res) {
     const idProfessor = req.params.idProfessor;
     const result = await professorController.deletarProfessor(idProfessor);
+    return res.json(result);
+});
+app.get("/listar-curso", async function (request, response) {
+    const result = await cursoController.listarCurso();
+    return response.json(result);
+});
+app.get("/consultar-curso-por-id/:idCurso", async function (request, response) {
+    const idCurso = request.params.idCurso;
+    const result = await cursoController.consultarCursoPorId(idCurso);
+    return response.json(result);
+});
+app.post("/criar-curso", async function (req, res) {
+    const body = req.body;
+    const result = await cursoController.criarCurso(body);
+    return res.json(result);
+});
+app.put("/alterar-curso/:idCurso", async function (req, res) {
+    const body = req.body;
+    const idCurso = req.params.idCurso;
+    if(req.body.curso) {
+        const result = await cursoController.alterarCurso(idCurso, body);
+        return res.json(result);  
+    } 
+    else {
+        return res.json("Necessário passar campos obrigatórios: curso_1, curso_2, curso_3, curso_4");
+    }
+});
+app.delete("/deletar-curso/:idCurso", async function (req, res) {
+    const idCurso = req.params.idCurso;
+    const result = await cursoController.deletarCurso(idCurso);
     return res.json(result);
 });
 

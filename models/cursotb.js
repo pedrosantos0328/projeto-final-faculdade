@@ -11,24 +11,9 @@ class Curso extends Model {
                     field: 'ID_CURSO'
                
                 },
-                curso_1: {
+                curso: {
                     type: Sequelize.STRING(255),
-                    field: 'CURSO_1',
-                    allowNull: false
-                },
-                curso_2: {
-                    type: Sequelize.STRING(255),
-                    field: 'CURSO_2',
-                    allowNull: false
-                },
-                curso_3: {
-                    type: Sequelize.STRING(255),
-                    field: 'CURSO_3',
-                    allowNull: false
-                },
-                curso_4: {
-                    type: Sequelize.STRING(255),
-                    field: 'CURSO_4',
+                    field: 'CURSO',
                     allowNull: false
                 },
             },
