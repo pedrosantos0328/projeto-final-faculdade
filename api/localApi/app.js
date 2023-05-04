@@ -6,6 +6,9 @@ const ProfessorController = require("../../scr/controller/professorController");
 const professorController = new ProfessorController();
 const CursoController = require("../../scr/controller/cursoController");
 const cursoController = new CursoController();
+const DisciplinaController = require("../../scr/controller/disciplinaController");
+const disciplinaController = new DisciplinaController();
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
@@ -91,12 +94,42 @@ app.put("/alterar-curso/:idCurso", async function (req, res) {
         return res.json(result);  
     } 
     else {
-        return res.json("Necessário passar campos obrigatórios: curso_1, curso_2, curso_3, curso_4");
+        return res.json("Necessário passar campos obrigatórios: curso");
     }
 });
 app.delete("/deletar-curso/:idCurso", async function (req, res) {
     const idCurso = req.params.idCurso;
     const result = await cursoController.deletarCurso(idCurso);
+    return res.json(result);
+});
+app.get("/listar-disciplina", async function (request, response) {
+    const result = await disciplinaController.listarDisciplina();
+    return response.json(result);
+});
+app.get("/consultar-disciplina-por-id/:idDisciplina", async function (request, response) {
+    const idDisciplina = request.params.idDisciplina;
+    const result = await disciplinaController.consultarDisciplinaPorId(idDisciplina);
+    return response.json(result);
+});
+app.post("/criar-disciplina", async function (req, res) {
+    const body = req.body;
+    const result = await disciplinaController.criarDisciplina(body);
+    return res.json(result);
+});
+app.put("/alterar-disciplina/:idDisciplina", async function (req, res) {
+    const body = req.body;
+    const idDisciplina = req.params.idDisciplina;
+    if(req.body.disciplina) {
+        const result = await disciplinaController.alterarDisciplina(idDisciplina, body);
+        return res.json(result);  
+    } 
+    else {
+        return res.json("Necessário passar campos obrigatórios: disciplina");
+    }
+});
+app.delete("/deletar-disciplina/:idDisciplina", async function (req, res) {
+    const idDisciplina = req.params.idDisciplina;
+    const result = await disciplinaController.deletarDisciplina(idDisciplina);
     return res.json(result);
 });
 

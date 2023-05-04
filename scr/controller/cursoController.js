@@ -23,12 +23,4 @@ async deletarCurso(idCurso) {
 }
 }
 
-
-
-
-
-
-
-
-
 module.exports = CursoController;

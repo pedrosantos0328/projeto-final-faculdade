@@ -11,24 +11,9 @@ class Disciplina extends Model {
                     field: 'ID_DISCIPLINA'
                
                 },
-                disciplina_1: {
+                disciplina: {
                     type: Sequelize.STRING(255),
-                    field: 'DISCIPLINA_1',
-                    allowNull: false
-                },
-                disciplina_2: {
-                    type: Sequelize.STRING(255),
-                    field: 'DISCIPLINA_2',
-                    allowNull: false
-                },
-                disciplina_3: {
-                    type: Sequelize.STRING(255),
-                    field: 'DISCIPLINA_3',
-                    allowNull: false
-                },
-                disciplina_4: {
-                    type: Sequelize.STRING(255),
-                    field: 'DISCIPLINA_4',
+                    field: 'DISCIPLINA',
                     allowNull: false
                 },
             },
