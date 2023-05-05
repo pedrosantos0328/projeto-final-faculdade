@@ -21,6 +21,10 @@ async alterarAluno(body, idAluno) {
 async deletarAluno(idAluno) {
     return await alunoService.deletarAluno(idAluno);
 }
+
+async criarAlunoEmLote(body) {
+    return await alunoService.criarAlunoEmLote(body);
+}
 }
 
 module.exports = AlunoController;

@@ -164,6 +164,13 @@ app.delete("/deletar-aluno/:idAluno", async function (req, res) {
     const result = await alunoController.deletarAluno(idAluno);
     return res.json(result);
 });
+app.post("/criar-aluno-em-lote", async function (req, res) {
+    const body = req.body;
+    const result = await alunoController.criarAlunoEmLote(body);
+    return res.json(result);
+});
+
+
 
 
 

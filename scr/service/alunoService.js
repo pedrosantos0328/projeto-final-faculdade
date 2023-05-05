@@ -133,6 +133,7 @@ async criarAluno(body) {
         if (insert) {
             return {
                 message: `Aluno ${nome} foi incluido com sucesso`
+
             }
         }
         return {
@@ -181,6 +182,27 @@ async deletarAluno(idAluno) {
         return {
             message: "Falha ao deletar aluno"
         };
+    } catch (erro) {
+        return erro;
+    }
+}
+
+async criarAlunoEmLote(body) {
+    const db = new Database();
+    try {
+        for(let contador = 0; contador < body.length; contador++) {
+            let nome = body[contador].nome
+            let cpf = body[contador].cpf
+            let endereco = body[contador].endereco
+            let idDiretoria = body[contador].idDiretoria
+            let idProfessor = body[contador].idProfessor
+            let idDisciplina = body[contador].idDisciplina
+            let idCurso = body[contador].idCurso
+            await Aluno.create({nome, cpf, endereco, idProfessor, idDiretoria, idCurso, idDisciplina});
+        }
+            return {
+                message: ` ${body.length} alunos foram incluidos com sucesso`              
+            }      
     } catch (erro) {
         return erro;
     }
