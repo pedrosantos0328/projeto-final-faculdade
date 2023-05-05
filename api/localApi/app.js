@@ -8,6 +8,8 @@ const CursoController = require("../../scr/controller/cursoController");
 const cursoController = new CursoController();
 const DisciplinaController = require("../../scr/controller/disciplinaController");
 const disciplinaController = new DisciplinaController();
+const AlunoController = require("../../scr/controller/alunoController");
+const alunoController = new AlunoController();
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
@@ -130,6 +132,36 @@ app.put("/alterar-disciplina/:idDisciplina", async function (req, res) {
 app.delete("/deletar-disciplina/:idDisciplina", async function (req, res) {
     const idDisciplina = req.params.idDisciplina;
     const result = await disciplinaController.deletarDisciplina(idDisciplina);
+    return res.json(result);
+});
+app.get("/listar-aluno", async function (request, response) {
+    const result = await alunoController.listarAluno();
+    return response.json(result);
+});
+app.get("/consultar-aluno-por-id/:idAluno", async function (request, response) {
+    const idAluno = request.params.idAluno;
+    const result = await alunoController.consultarAlunoPorId(idAluno);
+    return response.json(result);
+});
+app.post("/criar-aluno", async function (req, res) {
+    const body = req.body;
+    const result = await alunoController.criarAluno(body);
+    return res.json(result);
+});
+app.put("/alterar-aluno/:idAluno", async function (req, res) {
+    const body = req.body;
+    const idAluno = req.params.idAluno;
+    if(req.body.nome && req.body.cpf && req.body.endereco) {
+        const result = await alunoController.alterarAluno(idAluno, body);
+        return res.json(result);  
+    } 
+    else {
+        return res.json("Necessário passar campos obrigatórios: nome, cpf, endereco");
+    }
+});
+app.delete("/deletar-aluno/:idAluno", async function (req, res) {
+    const idAluno = req.params.idAluno;
+    const result = await alunoController.deletarAluno(idAluno);
     return res.json(result);
 });
 

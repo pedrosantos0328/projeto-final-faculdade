@@ -98,10 +98,6 @@ async deletarDisciplina(idDisciplina) {
         return erro;
     }
 }
-
-
 }
-
-
 
 module.exports = DisciplinaService;
