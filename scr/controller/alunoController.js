@@ -25,6 +25,10 @@ async deletarAluno(idAluno) {
 async criarAlunoEmLote(body) {
     return await alunoService.criarAlunoEmLote(body);
 }
+
+async consultarAlunoPorFiltro (filtro) {
+    return await alunoService.consultarAlunoPorFiltro(filtro);
+}
 }
 
 module.exports = AlunoController;

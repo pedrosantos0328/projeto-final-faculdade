@@ -199,11 +199,53 @@ async criarAlunoEmLote(body) {
             let idDisciplina = body[contador].idDisciplina
             let idCurso = body[contador].idCurso
             await Aluno.create({nome, cpf, endereco, idProfessor, idDiretoria, idCurso, idDisciplina});
+        const verificaAluno = await Aluno.findOne({
+            where: {
+                cpf: cpf
+            }
+        });
+        if(verificaAluno) {
+            return {
+                message: `Funcionario ${nome} já existe`
+            }
+        }
         }
             return {
                 message: ` ${body.length} alunos foram incluidos com sucesso`              
             }      
     } catch (erro) {
+        return erro;
+    }
+}
+
+async consultarAlunoPorFiltro(filtro) {
+    const db = new Database();
+    try {
+        let where = {};
+        if(filtro.idAluno) {
+            where.idAluno = filtro.idAluno;
+        }
+        if(filtro.idCurso) {
+            where.idCurso = filtro.idCurso;
+        }
+        if(filtro.nome) {
+            where.nome = filtro.nome;
+        }
+        if(filtro.cpf) {
+            where.cpf = filtro.cpf;
+        }
+        const result = await Aluno.findAll({
+            where
+        });
+
+        if(result.length) {
+            return result;        
+        }
+        return {
+            message: "Aluno não encontrado"
+        }
+    }
+    catch (erro) {
         return erro;
     }
 }
