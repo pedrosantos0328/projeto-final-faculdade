@@ -25,24 +25,11 @@ class Aluno extends Model {
                     type: Sequelize.STRING(255),
                     field: 'ENDERECO',
                     allowNull: false
-                },
-                  idProfessor: {
-                    type: Sequelize.BIGINT,
-                    field: 'ID_PROFESSOR'  
-                },
+                }, 
                 idCurso: {
                     type: Sequelize.BIGINT,
                     field: 'ID_CURSO'
-                },
-                idDisciplina: {
-                    type: Sequelize.BIGINT,
-                    field: 'ID_DISCIPLINA'
-                },
-                idDiretoria: {
-                    type: Sequelize.BIGINT,
-                    field: 'ID_DIRETORIA'
                 }
-
             },
             {
                 sequelize,
@@ -54,21 +41,9 @@ class Aluno extends Model {
         return this;
     }
     static associate (models) {
-        this.belongsTo(models.PROFESSOR_TB,{
-            foreignKey: "ID_PROFESSOR",
-            as: "professor"
-        });
         this.belongsTo(models.CURSO_TB,{
             foreignKey: "ID_CURSO",
             as: "curso"
-        });
-        this.belongsTo(models.DISCIPLINA_TB,{
-            foreignKey: "ID_DISCIPLINA",
-            as: "disciplina"
-        });
-        this.belongsTo(models.DIRETORIA_TB,{
-            foreignKey: "ID_DIRETORIA",
-            as: "diretoria"
         });
     }
     
