@@ -190,6 +190,7 @@ async deletarAluno(idAluno) {
 async criarAlunoEmLote(body) {
     const db = new Database();
     try {
+        let qtdAlunosIncluidos = 0;
         for(let contador = 0; contador < body.length; contador++) {
             let nome = body[contador].nome
             let cpf = body[contador].cpf
@@ -198,20 +199,19 @@ async criarAlunoEmLote(body) {
             let idProfessor = body[contador].idProfessor
             let idDisciplina = body[contador].idDisciplina
             let idCurso = body[contador].idCurso
-            await Aluno.create({nome, cpf, endereco, idProfessor, idDiretoria, idCurso, idDisciplina});
+           
         const verificaAluno = await Aluno.findOne({
             where: {
                 cpf: cpf
             }
         });
-        if(verificaAluno) {
-            return {
-                message: `Funcionario ${nome} já existe`
-            }
+        if(!verificaAluno) {
+            qtdAlunosIncluidos ++;
+            await Aluno.create({nome, cpf, endereco, idProfessor, idDiretoria, idCurso, idDisciplina});
         }
         }
             return {
-                message: ` ${body.length} alunos foram incluidos com sucesso`              
+                message: ` ${qtdAlunosIncluidos} alunos foram incluidos com sucesso`              
             }      
     } catch (erro) {
         return erro;

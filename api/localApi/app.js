@@ -170,7 +170,6 @@ app.post("/criar-aluno-em-lote", async function (req, res) {
     return res.json(result);
 });
 app.get("/consultar-aluno-por-filtro", async function (req, response) {
-    console.log(req.query);
     const filtro = req.query;
     const result = await alunoController.consultarAlunoPorFiltro(filtro);
     return response.json(result);
