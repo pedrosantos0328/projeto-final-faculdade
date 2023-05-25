@@ -16,6 +16,10 @@ class Curso extends Model {
                     field: 'CURSO',
                     allowNull: false
                 },
+                idDiretoria: {
+                    type: Sequelize.BIGINT,
+                    field: 'ID_DIRETORIA'
+                }
             },
             {
                 sequelize,
@@ -25,6 +29,13 @@ class Curso extends Model {
             }
         );
         return this;
+    }
+
+    static associate (models) {
+        this.belongsTo(models.DIRETORIA_TB,{
+            foreignKey: "ID_DIRETORIA",
+            as: "diretoria"
+        });
     }
 }
 module.exports = Curso

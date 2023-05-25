@@ -1,15 +1,34 @@
 const Database = require('../../database/conectDb');
 const Curso = require('../../models/cursotb');
+const Diretoria = require('../../models/diretoriatb');
 class CursoService {
 
 
 
 async listarCurso() {
     const db = new Database();
+    let arrRetornoFormatado = [];
     try {
-        const result = await Curso.findAll();
+        const result = await Curso.findAll({
+            include: [
+                {
+                    model: Diretoria,
+                    as: "diretoria"
+                }
+            ],
+            nest: true,
+            raw: true
+        });
         if (result) {
-            return result;
+            for (let contador = 0; contador < result.length; contador++) {
+                arrRetornoFormatado.push({
+                    idCurso: result[contador].idCurso,
+                    curso: result[contador].curso,
+                    idDiretoria: result[contador].idDiretoria,
+                    diretoria: result[contador].diretoria.nome
+                });
+            }
+            return arrRetornoFormatado;
         }
         return "Informação não encontrada!";
     }
@@ -23,12 +42,26 @@ async consultarCursoPorId(idCurso) {
     const db = new Database();
     try {
         const result = await Curso.findOne({
+            include: [
+                {
+                    model: Diretoria,
+                    as: "diretoria"
+                }
+
+            ],
+            nest: true,
+            raw: true,
             where: {
                 idCurso:idCurso
             }
         });
         if(result) {
-            return result;
+            return {
+                idCurso: result.idCurso,
+                curso: result.curso,
+                idDiretoria: result.idDiretoria,
+                diretoria: result.diretoria.nome  
+            }
         }
         return "Informação não encontrada!";
     }
@@ -40,9 +73,9 @@ async consultarCursoPorId(idCurso) {
 async criarCurso(body) {
     const db = new Database();
     try {
-        const { curso} = body;
+        const { curso, idDiretoria} = body;
     
-        const insert = await Curso.create({ curso });
+        const insert = await Curso.create({ curso, idDiretoria });
         if (insert) {
             return {
                 message: `Curso de ${curso} foi incluido com sucesso`
@@ -59,8 +92,8 @@ async criarCurso(body) {
 async alterarCurso(idCurso, body) {
     const db = new Database();
     try {
-        const { curso } = body;
-        const update = await Curso.update({ curso}, {
+        const { curso, idDiretoria } = body;
+        const update = await Curso.update({ curso, idDiretoria}, {
             where: {
                 idCurso: idCurso
             }
