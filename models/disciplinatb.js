@@ -16,6 +16,10 @@ class Disciplina extends Model {
                     field: 'DISCIPLINA',
                     allowNull: false
                 },
+                idCurso: {
+                    type: Sequelize.BIGINT,
+                    field: 'ID_CURSO'
+                }
             },
             {
                 sequelize,
@@ -25,6 +29,13 @@ class Disciplina extends Model {
             }
         );
         return this;
+    }
+
+    static associate (models) {
+        this.belongsTo(models.CURSO_TB,{
+            foreignKey: "ID_CURSO",
+            as: "curso"
+        });
     }
 }
 module.exports = Disciplina

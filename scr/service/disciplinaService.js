@@ -1,4 +1,5 @@
 const Database = require('../../database/conectDb');
+const Curso = require('../../models/cursotb');
 const Disciplina = require('../../models/disciplinatb');
 class DisciplinaService {
 
@@ -6,10 +7,28 @@ class DisciplinaService {
 
 async listarDisciplina() {
     const db = new Database();
+    let arrRetornoFormatado = [];
     try {
-        const result = await Disciplina.findAll();
+        const result = await Disciplina.findAll({
+            include: [
+                {
+                    model: Curso,
+                    as: "curso"
+                }
+            ],
+            nest: true,
+            raw: true
+        });
         if (result) {
-            return result;
+            for (let contador = 0; contador < result.length; contador++) {
+                arrRetornoFormatado.push({
+                    idDisciplina: result[contador].idDisciplina,
+                    disciplina: result[contador].disciplina,
+                    idCurso: result[contador].idCurso,
+                    curso: result[contador].curso.curso
+                });
+            }
+            return arrRetornoFormatado;
         }
         return "Informação não encontrada!";
     }
@@ -23,12 +42,26 @@ async consultarDisciplinaPorId(idDisciplina) {
     const db = new Database();
     try {
         const result = await Disciplina.findOne({
+            include: [
+                {
+                    model: Curso,
+                    as: "curso"
+                }
+
+            ],
+            nest: true,
+            raw: true,
             where: {
                 idDisciplina:idDisciplina
             }
         });
         if(result) {
-            return result;
+            return {
+                idDisciplina: result.idDisciplina,
+                disciplina: result.disciplina,
+                idCurso: result.idCurso,
+                curso: result.curso.curso
+            }
         }
         return "Informação não encontrada!";
     }
@@ -40,9 +73,9 @@ async consultarDisciplinaPorId(idDisciplina) {
 async criarDisciplina(body) {
     const db = new Database();
     try {
-        const {disciplina} = body;
+        const {disciplina, idCurso} = body;
     
-        const insert = await Disciplina.create({disciplina});
+        const insert = await Disciplina.create({disciplina, idCurso});
         if (insert) {
             return {
                 message: `Disciplina de ${disciplina} foi incluido com sucesso`
@@ -59,8 +92,8 @@ async criarDisciplina(body) {
 async alterarDisciplina(idDisciplina, body) {
     const db = new Database();
     try {
-        const {disciplina} = body;
-        const update = await Disciplina.update({disciplina}, {
+        const {disciplina, idCurso} = body;
+        const update = await Disciplina.update({disciplina, idCurso}, {
             where: {
                 idDisciplina: idDisciplina
             }
