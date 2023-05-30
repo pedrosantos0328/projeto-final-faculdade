@@ -30,7 +30,7 @@ async listarDisciplina() {
             }
             return arrRetornoFormatado;
         }
-        return "Informação não encontrada!";
+        return "Informação não foi encontrada!";
     }
     catch (erro) {
         console.log(erro);
