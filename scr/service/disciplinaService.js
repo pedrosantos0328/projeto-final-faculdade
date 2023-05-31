@@ -131,6 +131,28 @@ async deletarDisciplina(idDisciplina) {
         return erro;
     }
 }
+
+async consultarDisciplinaPorIdCurso(idCurso) {
+    const db = new Database();
+    try {
+        console.log(idCurso);
+        const result = await Disciplina.findAll({
+            nest: true,
+            raw: true,
+            where: {
+                idCurso:idCurso
+            }
+        });
+        console.log(result);
+        if(result) {
+            return result;
+        }
+        return "Informação não encontrada!";
+    }
+    catch (erro) {
+        return erro;
+    }
+}
 }
 
 module.exports = DisciplinaService;

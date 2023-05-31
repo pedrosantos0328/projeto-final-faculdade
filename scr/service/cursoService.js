@@ -1,6 +1,8 @@
 const Database = require('../../database/conectDb');
 const Curso = require('../../models/cursotb');
 const Diretoria = require('../../models/diretoriatb');
+const Disciplina = require('../../models/disciplinatb');
+const DisciplinaService = require('../service/disciplinaService');
 class CursoService {
 
 
@@ -9,7 +11,8 @@ async listarCurso() {
     const db = new Database();
     let arrRetornoFormatado = [];
     try {
-        const result = await Curso.findAll({
+        const disciplinaService = new DisciplinaService();
+        const arrCursos = await Curso.findAll({
             include: [
                 {
                     model: Diretoria,
@@ -19,13 +22,16 @@ async listarCurso() {
             nest: true,
             raw: true
         });
-        if (result) {
-            for (let contador = 0; contador < result.length; contador++) {
+        if (arrCursos) {
+            for (let contador = 0; contador < arrCursos.length; contador++) {
+                const idCurso = arrCursos[contador].idCurso;
+                const disciplinasCurso = await disciplinaService.consultarDisciplinaPorIdCurso(idCurso);
                 arrRetornoFormatado.push({
-                    idCurso: result[contador].idCurso,
-                    curso: result[contador].curso,
-                    idDiretoria: result[contador].idDiretoria,
-                    diretoria: result[contador].diretoria.nome
+                    idCurso: arrCursos[contador].idCurso,
+                    curso: arrCursos[contador].curso,
+                    idDiretoria: arrCursos[contador].idDiretoria,
+                    diretoria: arrCursos[contador].diretoria.nome,
+                    disciplina: disciplinasCurso 
                 });
             }
             return arrRetornoFormatado;
@@ -41,13 +47,13 @@ async listarCurso() {
 async consultarCursoPorId(idCurso) {
     const db = new Database();
     try {
+        const disciplinaService = new DisciplinaService();
         const result = await Curso.findOne({
             include: [
                 {
                     model: Diretoria,
                     as: "diretoria"
                 }
-
             ],
             nest: true,
             raw: true,
@@ -55,12 +61,14 @@ async consultarCursoPorId(idCurso) {
                 idCurso:idCurso
             }
         });
+        const disciplinasCurso = await disciplinaService.consultarDisciplinaPorIdCurso(idCurso);
         if(result) {
             return {
                 idCurso: result.idCurso,
                 curso: result.curso,
                 idDiretoria: result.idDiretoria,
-                diretoria: result.diretoria.nome  
+                diretoria: result.diretoria.nome,
+                disciplina: disciplinasCurso
             }
         }
         return "Informação não encontrada!";

@@ -37,5 +37,6 @@ class Curso extends Model {
             as: "diretoria"
         });
     }
+        
 }
 module.exports = Curso
