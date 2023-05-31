@@ -12,7 +12,7 @@ class AlunoService {
         const db = new Database();
         let arrRetornoFormatado = [];
         try {
-            const result = await Aluno.findAll({
+            const arrAlunos = await Aluno.findAll({
                 include: [
                     {
                         model: Curso,
@@ -22,16 +22,16 @@ class AlunoService {
                 nest: true,
                 raw: true
             });
-            if (result) {
 
-                for (let contador = 0; contador < result.length; contador++) {
+            if (arrAlunos) {
+                for (let contador = 0; contador < arrAlunos.length; contador++) {
                     arrRetornoFormatado.push({
-                        idAluno: result[contador].idAluno,
-                        aluno: result[contador].nome,
-                        cpf: result[contador].cpf,
-                        endereco: result[contador].endereco,
-                        idCurso: result[contador].idCurso,
-                        curso: result[contador].curso.curso
+                        idAluno: arrAlunos[contador].idAluno,
+                        aluno: arrAlunos[contador].nome,
+                        cpf: arrAlunos[contador].cpf,
+                        endereco: arrAlunos[contador].endereco,
+                        idCurso: arrAlunos[contador].idCurso,
+                        curso: arrAlunos[contador].curso.curso
                     });
                 }
                 return arrRetornoFormatado;
@@ -47,13 +47,12 @@ class AlunoService {
     async consultarAlunoPorId(idAluno) {
         const db = new Database();
         try {
-            const result = await Aluno.findOne({
+            const aluno = await Aluno.findOne({
                 include: [
                     {
                         model: Curso,
                         as: "curso"
                     }
-
                 ],
                 nest: true,
                 raw: true,
@@ -61,14 +60,15 @@ class AlunoService {
                     idAluno: idAluno
                 }
             });
-            if (result) {
+
+            if (aluno) {
                 return {
-                    idAluno: result.idAluno,
-                    aluno: result.nome,
-                    cpf: result.cpf,
-                    endereco: result.endereco,
-                    idCurso: result.idCurso,
-                    curso: result.curso.curso    
+                    idAluno: aluno.idAluno,
+                    aluno: aluno.nome,
+                    cpf: aluno.cpf,
+                    endereco: aluno.endereco,
+                    idCurso: aluno.idCurso,
+                    curso: aluno.curso.curso    
                 }
             }
             return "Informação não encontrada!";
@@ -87,11 +87,13 @@ class AlunoService {
                     cpf: cpf
                 }
             });
+
             if (verificaAluno) {
                 return {
                     message: `Aluno ${nome} já existe`
                 }
             }
+            
             const insert = await Aluno.create({ nome, cpf, endereco, idCurso});
             if (insert) {
                 return {
